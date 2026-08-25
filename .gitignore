@@ -1,0 +1,21 @@
+# зависимости (тяжёлая папка, не коммитим)
+node_modules/
+# результат сборки
+dist/
+# секреты (API-ключи, токен) — НИКОГДА не в гит
+.env
+.env.local
+.env.*.local
+# логи и кэш
+*.log
+.vite/
+# мусор
+.DS_Store
+Thumbs.db
+__MACOSX/
+# сгенеренные SQLite-базы (server, создаются при seed)
+server/src/data/*.db
+server/src/data/*.db-journal
+server/src/data/*.db-shm
+server/src/data/*.db-wal
+server/src/data/*.sqlite

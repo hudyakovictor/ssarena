@@ -1,0 +1,418 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Signal Arena — Proof of Skill | GameFi 2.0</title>
+    <meta name="description" content="The world's first educational GameFi 2.0 trading arena. Battle 18 Market Entities. Learn real trading skills. Earn $SIG tokens.">
+    <meta property="og:title" content="Signal Arena — Proof of Skill">
+    <meta property="og:description" content="A crypto game that makes you smarter, not poorer.">
+    <meta property="og:type" content="website">
+    <meta name="twitter:card" content="summary_large_image">
+    <style>
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        :root {
+            --signal: #22d3ee; --short: #fb4b6b; --long: #2bd47f;
+            --gold: #fbbf24; --grape: #8b5cf6; --void: #05070f;
+            --ink: #e2e8f0; --inkSoft: #94a3b8; --inkDim: #5e6d85;
+            --edge: rgba(255,255,255,0.06);
+        }
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+            background: var(--void); color: var(--ink);
+            line-height: 1.6; overflow-x: hidden;
+        }
+        .container { max-width: 1200px; margin: 0 auto; padding: 0 24px; }
+        
+        /* Hero */
+        .hero {
+            min-height: 100vh; display: flex; flex-direction: column;
+            align-items: center; justify-content: center; text-align: center;
+            position: relative; overflow: hidden;
+        }
+        .hero::before {
+            content: ''; position: absolute; inset: 0;
+            background: radial-gradient(ellipse at 50% 30%, rgba(34,211,238,0.15) 0%, transparent 60%);
+        }
+        .hero-icon { font-size: 5rem; margin-bottom: 1.5rem; animation: pulse 3s ease-in-out infinite; }
+        .hero h1 {
+            font-size: clamp(2.5rem, 6vw, 4.5rem); font-weight: 900;
+            text-transform: uppercase; letter-spacing: -0.02em;
+            background: linear-gradient(135deg, var(--signal), #06b6d4);
+            -webkit-background-clip: text; -webkit-text-fill-color: transparent;
+            background-clip: text; line-height: 1.1;
+        }
+        .hero .subtitle {
+            font-size: clamp(1rem, 2.5vw, 1.5rem); color: var(--inkSoft);
+            margin: 1rem 0 2rem; font-weight: 300;
+        }
+        .hero .motto {
+            font-family: 'Courier New', monospace; font-size: 0.9rem;
+            color: var(--inkDim); margin-bottom: 2.5rem;
+        }
+        .btn {
+            display: inline-flex; align-items: center; gap: 8px;
+            padding: 14px 32px; border-radius: 12px; font-weight: 700;
+            font-size: 1rem; text-decoration: none; transition: all 0.2s;
+            text-transform: uppercase; letter-spacing: 0.05em; border: none; cursor: pointer;
+        }
+        .btn-primary {
+            background: linear-gradient(135deg, var(--signal), #06b6d4);
+            color: var(--void); box-shadow: 0 0 30px rgba(34,211,238,0.3);
+        }
+        .btn-primary:hover { transform: scale(1.05); box-shadow: 0 0 50px rgba(34,211,238,0.5); }
+        .btn-ghost {
+            background: rgba(255,255,255,0.05); color: var(--ink);
+            border: 1px solid var(--edge);
+        }
+        .btn-ghost:hover { background: rgba(255,255,255,0.1); }
+        .btn-group { display: flex; gap: 16px; flex-wrap: wrap; justify-content: center; }
+        
+        /* Stats bar */
+        .stats-bar {
+            display: flex; gap: 24px; justify-content: center; flex-wrap: wrap;
+            margin: 3rem 0 1rem; padding: 1.5rem; border-radius: 16px;
+            background: rgba(255,255,255,0.03); border: 1px solid var(--edge);
+        }
+        .stat { text-align: center; }
+        .stat-value { font-size: 2rem; font-weight: 900; color: var(--signal); }
+        .stat-label { font-size: 0.75rem; color: var(--inkDim); text-transform: uppercase; letter-spacing: 0.1em; }
+        
+        /* Sections */
+        section { padding: 6rem 0; }
+        .section-title {
+            font-size: 2.5rem; font-weight: 900; text-transform: uppercase;
+            text-align: center; margin-bottom: 1rem;
+        }
+        .section-sub { text-align: center; color: var(--inkSoft); max-width: 600px; margin: 0 auto 3rem; }
+        
+        /* Entity Grid */
+        .entity-grid {
+            display: grid; grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+            gap: 20px;
+        }
+        .entity-card {
+            background: linear-gradient(160deg, #0c1124, #080c1a);
+            border: 1px solid var(--edge); border-radius: 20px;
+            padding: 24px; transition: all 0.3s;
+        }
+        .entity-card:hover { transform: translateY(-4px); border-color: var(--signal); }
+        .entity-header { display: flex; align-items: center; gap: 12px; margin-bottom: 12px; }
+        .entity-icon { font-size: 2.5rem; }
+        .entity-name { font-weight: 800; font-size: 1.1rem; }
+        .entity-meta { font-size: 0.7rem; color: var(--inkDim); font-family: monospace; }
+        .entity-desc { font-size: 0.85rem; color: var(--inkSoft); line-height: 1.5; }
+        .entity-threat {
+            display: inline-block; padding: 2px 10px; border-radius: 20px;
+            font-size: 0.65rem; font-weight: 700; text-transform: uppercase;
+            letter-spacing: 0.1em; margin-top: 8px;
+        }
+        
+        /* How it works */
+        .steps { display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 24px; }
+        .step {
+            text-align: center; padding: 32px 20px; border-radius: 20px;
+            background: rgba(255,255,255,0.02); border: 1px solid var(--edge);
+        }
+        .step-num {
+            width: 48px; height: 48px; border-radius: 50%; display: flex;
+            align-items: center; justify-content: center; margin: 0 auto 16px;
+            font-weight: 900; font-size: 1.2rem;
+        }
+        .step h3 { font-size: 1rem; margin-bottom: 8px; }
+        .step p { font-size: 0.85rem; color: var(--inkSoft); }
+        
+        /* Revenue */
+        .revenue-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(150px, 1fr)); gap: 16px; }
+        .revenue-card {
+            text-align: center; padding: 24px 16px; border-radius: 16px;
+            background: rgba(255,255,255,0.02); border: 1px solid var(--edge);
+        }
+        .revenue-icon { font-size: 2rem; margin-bottom: 8px; }
+        .revenue-label { font-size: 0.75rem; color: var(--inkDim); margin-bottom: 4px; }
+        .revenue-value { font-size: 1.5rem; font-weight: 900; }
+        
+        /* Tokenomics */
+        .token-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(250px, 1fr)); gap: 24px; }
+        .token-card {
+            padding: 24px; border-radius: 16px;
+            background: rgba(255,255,255,0.02); border: 1px solid var(--edge);
+        }
+        .token-card h3 { font-size: 1rem; margin-bottom: 12px; color: var(--gold); }
+        .token-row { display: flex; justify-content: space-between; padding: 8px 0; border-bottom: 1px solid var(--edge); }
+        .token-row:last-child { border: none; }
+        .token-key { color: var(--inkSoft); font-size: 0.85rem; }
+        .token-val { font-weight: 700; font-size: 0.85rem; }
+        
+        /* CTA */
+        .cta {
+            text-align: center; padding: 80px 24px; border-radius: 24px;
+            background: linear-gradient(135deg, rgba(34,211,238,0.1), rgba(139,92,246,0.1));
+            border: 1px solid var(--edge); margin: 4rem 0;
+        }
+        .cta h2 { font-size: 2.5rem; font-weight: 900; margin-bottom: 1rem; }
+        .cta p { color: var(--inkSoft); margin-bottom: 2rem; max-width: 500px; margin-left: auto; margin-right: auto; }
+        
+        /* Footer */
+        footer {
+            text-align: center; padding: 3rem 0; border-top: 1px solid var(--edge);
+            color: var(--inkDim); font-size: 0.8rem;
+        }
+        .footer-links { display: flex; gap: 24px; justify-content: center; margin-bottom: 1rem; }
+        .footer-links a { color: var(--inkSoft); text-decoration: none; transition: color 0.2s; }
+        .footer-links a:hover { color: var(--signal); }
+        
+        /* Animations */
+        @keyframes pulse { 0%, 100% { transform: scale(1); } 50% { transform: scale(1.1); } }
+        @keyframes float { 0%, 100% { transform: translateY(0); } 50% { transform: translateY(-10px); } }
+        .float { animation: float 4s ease-in-out infinite; }
+        
+        /* Responsive */
+        @media (max-width: 768px) {
+            .stats-bar { flex-direction: column; gap: 16px; }
+            .hero h1 { font-size: 2.5rem; }
+            section { padding: 4rem 0; }
+        }
+    </style>
+</head>
+<body>
+    <!-- HERO -->
+    <div class="hero">
+        <div class="container">
+            <div class="hero-icon float">⚔️</div>
+            <h1>Signal Arena</h1>
+            <p class="subtitle">Proof of Skill — The First Educational GameFi 2.0 Trading Arena</p>
+            <p class="motto">"A crypto game that makes you smarter, not poorer."</p>
+            <div class="btn-group">
+                <a href="/app" class="btn btn-primary">🎮 Play Now</a>
+                <a href="#entities" class="btn btn-ghost">📖 Learn More</a>
+            </div>
+            <div class="stats-bar">
+                <div class="stat">
+                    <div class="stat-value">18</div>
+                    <div class="stat-label">Market Entities</div>
+                </div>
+                <div class="stat">
+                    <div class="stat-value">12</div>
+                    <div class="stat-label">Skill Axes</div>
+                </div>
+                <div class="stat">
+                    <div class="stat-value">4</div>
+                    <div class="stat-label">Game Modes</div>
+                </div>
+                <div class="stat">
+                    <div class="stat-value">$131M</div>
+                    <div class="stat-label">Year 5 ARR</div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- HOW IT WORKS -->
+    <section>
+        <div class="container">
+            <h2 class="section-title">How It Works</h2>
+            <p class="section-sub">Learn trading through battle. Every mistake is an entity. Every battle makes you smarter.</p>
+            <div class="steps">
+                <div class="step">
+                    <div class="step-num" style="background: rgba(34,211,238,0.15); color: var(--signal);">1</div>
+                    <h3>Detect</h3>
+                    <p>A Market Entity appears. It represents a real trading mistake.</p>
+                </div>
+                <div class="step">
+                    <div class="step-num" style="background: rgba(43,212,127,0.15); color: var(--long);">2</div>
+                    <h3>Analyze</h3>
+                    <p>Open data sources: charts, on-chain, sentiment, news.</p>
+                </div>
+                <div class="step">
+                    <div class="step-num" style="background: rgba(251,191,36,0.15); color: var(--gold);">3</div>
+                    <h3>Decide</h3>
+                    <p>Choose your action under time pressure. Discipline wins.</p>
+                </div>
+                <div class="step">
+                    <div class="step-num" style="background: rgba(139,92,246,0.15); color: var(--grape);">4</div>
+                    <h3>Learn</h3>
+                    <p>Terminal Voice explains what went right or wrong.</p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- ENTITIES -->
+    <section id="entities">
+        <div class="container">
+            <h2 class="section-title">18 Market Entities</h2>
+            <p class="section-sub">Every trading mistake has a face. Can you defeat them all?</p>
+            <div class="entity-grid">
+                <div class="entity-card">
+                    <div class="entity-header">
+                        <span class="entity-icon">💀</span>
+                        <div>
+                            <div class="entity-name">FOMO Wraith</div>
+                            <div class="entity-meta">Wraith · Psychology</div>
+                        </div>
+                    </div>
+                    <p class="entity-desc">Feeds on fear of missing out. Green candles scream "buy now". The Wraith whispers. Discipline is your only shield.</p>
+                    <span class="entity-threat" style="background: rgba(251,75,107,0.15); color: var(--short);">HIGH</span>
+                </div>
+                <div class="entity-card">
+                    <div class="entity-header">
+                        <span class="entity-icon">👻</span>
+                        <div>
+                            <div class="entity-name">Fake Breakout Phantom</div>
+                            <div class="entity-meta">Phantom · Technical Analysis</div>
+                        </div>
+                    </div>
+                    <p class="entity-desc">Disguises traps as opportunities. Breakout looks real, volume confirms. You enter. Price reverses. You provided exit liquidity.</p>
+                    <span class="entity-threat" style="background: rgba(251,75,107,0.15); color: var(--short);">HIGH</span>
+                </div>
+                <div class="entity-card">
+                    <div class="entity-header">
+                        <span class="entity-icon">👺</span>
+                        <div>
+                            <div class="entity-name">Leverage Goblin</div>
+                            <div class="entity-meta">Goblin · Derivatives</div>
+                        </div>
+                    </div>
+                    <p class="entity-desc">Temptation incarnate. "25x is safe. 50x for the bold. 100x for legends." The Goblin's deal always has a hidden price.</p>
+                    <span class="entity-threat" style="background: rgba(251,75,107,0.15); color: var(--short);">HIGH</span>
+                </div>
+                <div class="entity-card">
+                    <div class="entity-header">
+                        <span class="entity-icon">🎭</span>
+                        <div>
+                            <div class="entity-name">Honeypot Mimic</div>
+                            <div class="entity-meta">Mimic · Security</div>
+                        </div>
+                    </div>
+                    <p class="entity-desc">Smart contract pretending to be a gem. Buy button works. Sell button doesn't. "Welcome to the honeypot."</p>
+                    <span class="entity-threat" style="background: rgba(251,75,107,0.25); color: #ff6b8a;">CRITICAL</span>
+                </div>
+                <div class="entity-card">
+                    <div class="entity-header">
+                        <span class="entity-icon">🕴️</span>
+                        <div>
+                            <div class="entity-name">Whale Syndicate</div>
+                            <div class="entity-meta">Syndicate · Fundamental</div>
+                        </div>
+                    </div>
+                    <p class="entity-desc">Organized market manipulation. 47 wallets acting as one. They paint the chart for you. You are the exit liquidity.</p>
+                    <span class="entity-threat" style="background: rgba(251,75,107,0.15); color: var(--short);">HIGH</span>
+                </div>
+                <div class="entity-card">
+                    <div class="entity-header">
+                        <span class="entity-icon">🐉</span>
+                        <div>
+                            <div class="entity-name">Hubris Dragon</div>
+                            <div class="entity-meta">Dragon · Psychology</div>
+                        </div>
+                    </div>
+                    <p class="entity-desc">The only entity that GROWS with your victories. 10 wins in a row? Dragon is huge. Confidence is your enemy.</p>
+                    <span class="entity-threat" style="background: rgba(251,75,107,0.15); color: var(--short);">HIGH</span>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- TOKENOMICS -->
+    <section>
+        <div class="container">
+            <h2 class="section-title">$SIG Tokenomics</h2>
+            <p class="section-sub">Deflationary by design. More players = more burns = less supply.</p>
+            <div class="token-grid">
+                <div class="token-card">
+                    <h3>Supply & Distribution</h3>
+                    <div class="token-row"><span class="token-key">Total Supply</span><span class="token-val">1,000,000,000</span></div>
+                    <div class="token-row"><span class="token-key">Burn Rate</span><span class="token-val" style="color: var(--short);">40%</span></div>
+                    <div class="token-row"><span class="token-key">Deflationary By</span><span class="token-val" style="color: var(--long);">Year 2</span></div>
+                    <div class="token-row"><span class="token-key">Chain</span><span class="token-val">Arbitrum L2</span></div>
+                </div>
+                <div class="token-card">
+                    <h3>Use Cases</h3>
+                    <div class="token-row"><span class="token-key">Tournament Entry</span><span class="token-val">🎮</span></div>
+                    <div class="token-row"><span class="token-key">Marketplace</span><span class="token-val">🛒</span></div>
+                    <div class="token-row"><span class="token-key">Staking Rewards</span><span class="token-val">💎</span></div>
+                    <div class="token-row"><span class="token-key">Governance</span><span class="token-val">🗳️</span></div>
+                </div>
+                <div class="token-card">
+                    <h3>Emission Schedule</h3>
+                    <div class="token-row"><span class="token-key">Year 1</span><span class="token-val">95M</span></div>
+                    <div class="token-row"><span class="token-key">Year 2</span><span class="token-val">47.5M (halving)</span></div>
+                    <div class="token-row"><span class="token-key">Year 3</span><span class="token-val">23.75M</span></div>
+                    <div class="token-row"><span class="token-key">Year 5</span><span class="token-val">5.9M</span></div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- REVENUE -->
+    <section>
+        <div class="container">
+            <h2 class="section-title">Revenue Model</h2>
+            <p class="section-sub">7 revenue streams. NOT dependent on token price.</p>
+            <div class="revenue-grid">
+                <div class="revenue-card">
+                    <div class="revenue-icon">🤖</div>
+                    <div class="revenue-label">AI Coach</div>
+                    <div class="revenue-value" style="color: var(--signal);">$599K</div>
+                </div>
+                <div class="revenue-card">
+                    <div class="revenue-icon">👑</div>
+                    <div class="revenue-label">Season Pass</div>
+                    <div class="revenue-value" style="color: var(--gold);">$720K</div>
+                </div>
+                <div class="revenue-card">
+                    <div class="revenue-icon">🎨</div>
+                    <div class="revenue-label">Cosmetics</div>
+                    <div class="revenue-value" style="color: var(--grape);">$900K</div>
+                </div>
+                <div class="revenue-card">
+                    <div class="revenue-icon">🏆</div>
+                    <div class="revenue-label">Tournaments</div>
+                    <div class="revenue-value" style="color: var(--long);">$90K</div>
+                </div>
+                <div class="revenue-card">
+                    <div class="revenue-icon">🔌</div>
+                    <div class="revenue-label">B2B API</div>
+                    <div class="revenue-value" style="color: var(--inkSoft);">$0→$6M</div>
+                </div>
+                <div class="revenue-card">
+                    <div class="revenue-icon">📚</div>
+                    <div class="revenue-label">Education</div>
+                    <div class="revenue-value" style="color: var(--inkSoft);">$0→$5M</div>
+                </div>
+            </div>
+            <p style="text-align: center; margin-top: 2rem; color: var(--inkDim); font-size: 0.85rem;">
+                Year 1: $2.3M ARR → Year 3: $24.7M ARR → Year 5: $131.4M ARR
+            </p>
+        </div>
+    </section>
+
+    <!-- CTA -->
+    <div class="container">
+        <div class="cta">
+            <h2>Ready to Battle?</h2>
+            <p>Join the arena. Defeat your trading demons. Become a Market Legend.</p>
+            <div class="btn-group">
+                <a href="/app" class="btn btn-primary">⚔️ Enter Arena</a>
+                <a href="https://discord.gg/signalarena" class="btn btn-ghost">💬 Discord</a>
+                <a href="https://twitter.com/SignalArena_io" class="btn btn-ghost">🐦 Twitter</a>
+            </div>
+        </div>
+    </div>
+
+    <!-- FOOTER -->
+    <footer>
+        <div class="container">
+            <div class="footer-links">
+                <a href="/app">Play</a>
+                <a href="https://twitter.com/SignalArena_io">Twitter</a>
+                <a href="https://discord.gg/signalarena">Discord</a>
+                <a href="https://t.me/signalarena">Telegram</a>
+                <a href="/whitepaper">Whitepaper</a>
+            </div>
+            <p>© 2026 Signal Arena. "Play the market. Don't become the liquidity."</p>
+        </div>
+    </footer>
+</body>
+</html>

@@ -1,0 +1,184 @@
+# ============================================================
+# SIGNAL ARENA — INFRASTRUCTURE (Stateful services)
+# PostgreSQL (Users + Content), Redis, RabbitMQ
+# ============================================================
+apiVersion: v1
+kind: Namespace
+metadata:
+  name: signal-arena
+---
+# ── DB_USERS (PostgreSQL, transactional) ──
+apiVersion: apps/v1
+kind: StatefulSet
+metadata:
+  name: sa-db-users
+  namespace: signal-arena
+spec:
+  serviceName: sa-db-users-service
+  replicas: 1
+  selector:
+    matchLabels:
+      app: sa-db-users
+  template:
+    metadata:
+      labels:
+        app: sa-db-users
+    spec:
+      containers:
+      - name: postgres
+        image: postgres:16-alpine
+        ports:
+        - containerPort: 5432
+        env:
+        - name: POSTGRES_DB
+          value: "signal_arena_users"
+        - name: POSTGRES_USER
+          valueFrom:
+            secretKeyRef:
+              name: sa-secrets
+              key: db-users-user
+        - name: POSTGRES_PASSWORD
+          valueFrom:
+            secretKeyRef:
+              name: sa-secrets
+              key: db-users-password
+        volumeMounts:
+        - name: pg-users-data
+          mountPath: /var/lib/postgresql/data
+        resources:
+          requests:
+            cpu: 500m
+            memory: 1Gi
+  volumeClaimTemplates:
+  - metadata:
+      name: pg-users-data
+    spec:
+      accessModes: ["ReadWriteOnce"]
+      resources:
+        requests:
+          storage: 50Gi
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: sa-db-users-service
+  namespace: signal-arena
+spec:
+  selector:
+    app: sa-db-users
+  ports:
+  - port: 5432
+  type: ClusterIP
+---
+# ── DB_CONTENT (Read-Only replica) ──
+apiVersion: apps/v1
+kind: StatefulSet
+metadata:
+  name: sa-db-content
+  namespace: signal-arena
+spec:
+  serviceName: sa-db-content-service
+  replicas: 1
+  selector:
+    matchLabels:
+      app: sa-db-content
+  template:
+    metadata:
+      labels:
+        app: sa-db-content
+    spec:
+      containers:
+      - name: postgres
+        image: postgres:16-alpine
+        ports:
+        - containerPort: 5432
+        env:
+        - name: POSTGRES_DB
+          value: "signal_arena_content"
+        - name: POSTGRES_USER
+          valueFrom:
+            secretKeyRef:
+              name: sa-secrets
+              key: db-content-user
+        - name: POSTGRES_PASSWORD
+          valueFrom:
+            secretKeyRef:
+              name: sa-secrets
+              key: db-content-password
+        volumeMounts:
+        - name: pg-content-data
+          mountPath: /var/lib/postgresql/data
+  volumeClaimTemplates:
+  - metadata:
+      name: pg-content-data
+    spec:
+      accessModes: ["ReadWriteOnce"]
+      resources:
+        requests:
+          storage: 20Gi
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: sa-db-content-service
+  namespace: signal-arena
+spec:
+  selector:
+    app: sa-db-content
+  ports:
+  - port: 5432
+  type: ClusterIP
+---
+# ── Redis (Battle Session Buffer) ──
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: sa-redis
+  namespace: signal-arena
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: sa-redis
+  template:
+    metadata:
+      labels:
+        app: sa-redis
+    spec:
+      containers:
+      - name: redis
+        image: redis:7-alpine
+        ports:
+        - containerPort: 6379
+        resources:
+          requests:
+            cpu: 100m
+            memory: 256Mi
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: sa-redis-service
+  namespace: signal-arena
+spec:
+  selector:
+    app: sa-redis
+  ports:
+  - port: 6379
+  type: ClusterIP
+---
+# ── Secrets ──
+apiVersion: v1
+kind: Secret
+metadata:
+  name: sa-secrets
+  namespace: signal-arena
+type: Opaque
+stringData:
+  jwt-secret: "change-this-to-a-random-256-bit-key"
+  db-users-user: "sa_user"
+  db-users-password: "change-me-db-users"
+  db-content-user: "sa_content_reader"
+  db-content-password: "change-me-db-content"
+  rabbitmq-url: "amqp://sa-rabbitmq-service:5672"
+  openrouter-api-key: ""

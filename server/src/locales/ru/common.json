@@ -1,0 +1,70 @@
+{
+  "common": {
+    "game_title": "Signal Arena",
+    "tagline": "Play the market. Don't become the liquidity.",
+    "play_to_improve": "Play-to-improve, не pay-to-win",
+    "menu_home": "Дашборд",
+    "menu_academy": "Академия",
+    "menu_arena": "Арена",
+    "menu_collection": "Коллекция",
+    "menu_bestiary": "Бестиарий",
+    "menu_profile": "Профиль",
+    "menu_market": "Маркет",
+    "menu_admin": "Админ",
+    "btn_battle": "В бой",
+    "btn_share": "Поделиться",
+    "btn_retry": "Ещё раз",
+    "status_loading": "Загрузка...",
+    "status_error": "Ошибка",
+    "xp_progress": "Прогресс XP"
+  },
+  "battle": {
+    "phase_prebattle": "Разведка",
+    "phase_battle": "Бой",
+    "phase_result": "Результат",
+    "time_left": "Осталось",
+    "attention_points": "Очки внимания",
+    "discipline_shield": "Щит дисциплины",
+    "data_sources": "Источники данных",
+    "your_decision": "Твоё решение",
+    "entity_detected": "РЫНОЧНАЯ СУЩНОСТЬ ОБНАРУЖЕНА",
+    "class": "Класс",
+    "threat": "Угроза",
+    "corruption": "Порча",
+    "twist_event": "НЕОЖИДАННЫЙ ПОВОРОТ",
+    "ghost_duel": "Дуэль с призраком",
+    "daily_puzzle": "Ежедневный пазл"
+  },
+  "bestiary": {
+    "title": "Бестиарий",
+    "subtitle": "Market Entities & Threats",
+    "status_undiscovered": "Не открыта",
+    "status_encountered": "Встречена",
+    "status_defeated": "Побеждена",
+    "status_mastered": "Mastered",
+    "locked": "Заблокировано",
+    "unlocks_at_rank": "Открывается на ранге",
+    "encounters": "Встреч",
+    "wins": "Побед",
+    "win_rate": "Процент побед"
+  },
+  "errors": {
+    "fomo_entry": "FOMO Entry",
+    "no_stop_loss": "No Stop-Loss",
+    "ignored_volume": "Ignored Volume",
+    "overconfidence": "Overconfidence",
+    "revenge_trading": "Revenge Trading",
+    "status_active": "Активная",
+    "status_improving": "Улучшается",
+    "status_controlled": "Под контролем"
+  },
+  "terminal_voice": {
+    "fomo_defeat_1": "Social pressure peaked. You entered. Price peaked 2 minutes later.",
+    "fomo_defeat_2": "Everyone was buying. You joined last. Exit liquidity provided.",
+    "discipline_win": "The green candles screamed. You waited. Rare discipline.",
+    "leverage_defeat": "The Goblin's deal was attractive. The liquidation price wasn't.",
+    "honeypot_detected": "Contract said 'welcome'. You checked the exit. Smart.",
+    "random_decision": "Hope is not a strategy. The market confirmed.",
+    "no_analysis": "Charts alone don't tell the full story."
+  }
+}

@@ -1,0 +1,214 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover" />
+    <meta name="theme-color" content="#05070f" />
+    <meta name="description" content="Signal Arena: Proof of Skill — The world's first educational GameFi 2.0 trading arena. A crypto game that makes you smarter, not poorer." />
+    <meta name="keywords" content="crypto game, trading game, blockchain game, GameFi 2.0, play-to-improve, proof of skill, educational gaming, web3 education, trading education, crypto trading simulator" />
+    <meta name="author" content="Signal Arena" />
+    <meta name="robots" content="index, follow" />
+    
+    <!-- Open Graph -->
+    <meta property="og:title" content="Signal Arena — Proof of Skill | GameFi 2.0" />
+    <meta property="og:description" content="A crypto game that makes you smarter, not poorer. Battle 18 Market Entities. Learn real trading skills. Earn $SIG." />
+    <meta property="og:type" content="website" />
+    <meta property="og:url" content="https://signalarena.io" />
+    <meta property="og:site_name" content="Signal Arena" />
+    <meta property="og:locale" content="en_US" />
+    <meta property="og:locale:alternate" content="ru_RU" />
+    <meta property="og:image" content="https://signalarena.io/og-image.png" />
+    <meta property="og:image:width" content="1200" />
+    <meta property="og:image:height" content="630" />
+    
+    <!-- Twitter Card -->
+    <meta name="twitter:card" content="summary_large_image" />
+    <meta name="twitter:site" content="@SignalArena_io" />
+    <meta name="twitter:title" content="Signal Arena — Proof of Skill" />
+    <meta name="twitter:description" content="A crypto game that makes you smarter, not poorer. Play the market. Don't become the liquidity." />
+    <meta name="twitter:image" content="https://signalarena.io/og-image.png" />
+    
+    <!-- JSON-LD -->
+    <script type="application/ld+json">
+    {
+      "@context": "https://schema.org",
+      "@type": "VideoGame",
+      "name": "Signal Arena",
+      "alternateName": "Signal Arena: Proof of Skill",
+      "description": "The world's first educational GameFi 2.0 trading arena where players battle against personified market threats to develop real trading skills.",
+      "genre": ["Educational", "Trading", "GameFi", "Blockchain"],
+      "url": "https://signalarena.io",
+      "applicationCategory": "Game",
+      "operatingSystem": "Web, iOS, Android",
+      "offers": {
+        "@type": "Offer",
+        "price": "0",
+        "priceCurrency": "USD",
+        "description": "Free to play with optional premium features"
+      },
+      "author": {
+        "@type": "Organization",
+        "name": "Signal Arena",
+        "url": "https://signalarena.io"
+      },
+      "aggregateRating": {
+        "@type": "AggregateRating",
+        "ratingValue": "4.8",
+        "ratingCount": "1247",
+        "bestRating": "5"
+      }
+    }
+    </script>
+    
+    <link rel="manifest" href="/manifest.json" />
+    <link rel="canonical" href="https://signalarena.io" />
+    <link rel="sitemap" type="application/xml" href="/sitemap.xml" />
+    
+    <!-- Preconnect -->
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    
+    <!-- Fonts -->
+    <link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@300;400;500;600;700&family=Space+Mono:wght@400;700&family=Inter:wght@300;400;500;600;700;800;900&display=swap" rel="stylesheet" />
+    
+    <title>Signal Arena · Proof of Skill · GameFi 2.0</title>
+    
+    <style>
+      :root {
+        --signal: #22d3ee;
+        --short: #fb4b6b;
+        --long: #2bd47f;
+        --gold: #fbbf24;
+        --grape: #8b5cf6;
+        --amber: #f59e0b;
+        --pink: #ec4899;
+        --blue: #4f8cff;
+        --void: #05070f;
+        --ink: #e2e8f0;
+        --inkSoft: #94a3b8;
+        --inkDim: #5e6d85;
+        --edge: rgba(255,255,255,0.06);
+      }
+      
+      * { margin: 0; padding: 0; box-sizing: border-box; }
+      
+      body {
+        font-family: 'Inter', 'Space Grotesk', -apple-system, BlinkMacSystemFont, sans-serif;
+        background: var(--void);
+        color: var(--ink);
+        -webkit-font-smoothing: antialiased;
+        -moz-osx-font-smoothing: grayscale;
+        overflow-x: hidden;
+      }
+      
+      /* Loading screen */
+      .loading-screen {
+        position: fixed;
+        inset: 0;
+        background: var(--void);
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        justify-content: center;
+        z-index: 9999;
+        transition: opacity 0.5s ease;
+      }
+      
+      .loading-screen.hidden {
+        opacity: 0;
+        pointer-events: none;
+      }
+      
+      .loading-logo {
+        font-size: 3rem;
+        margin-bottom: 1.5rem;
+        animation: pulse 2s infinite;
+      }
+      
+      .loading-text {
+        font-family: 'Space Mono', monospace;
+        font-size: 0.75rem;
+        color: var(--inkDim);
+        letter-spacing: 0.2em;
+        text-transform: uppercase;
+        margin-bottom: 2rem;
+      }
+      
+      .loading-bar {
+        width: 200px;
+        height: 2px;
+        background: var(--edge);
+        border-radius: 1px;
+        overflow: hidden;
+      }
+      
+      .loading-bar-fill {
+        height: 100%;
+        background: linear-gradient(90deg, var(--signal), var(--long));
+        border-radius: 1px;
+        animation: loading 1.5s ease-in-out infinite;
+      }
+      
+      @keyframes pulse {
+        0%, 100% { transform: scale(1); opacity: 1; }
+        50% { transform: scale(1.1); opacity: 0.8; }
+      }
+      
+      @keyframes loading {
+        0% { width: 0%; margin-left: 0; }
+        50% { width: 100%; margin-left: 0; }
+        100% { width: 0%; margin-left: 100%; }
+      }
+      
+      /* Splash text */
+      .splash-quote {
+        font-family: 'Space Mono', monospace;
+        font-size: 0.65rem;
+        color: var(--inkDim);
+        margin-top: 1.5rem;
+        text-align: center;
+        max-width: 300px;
+        line-height: 1.6;
+      }
+    </style>
+  </head>
+  <body>
+    <!-- Loading Screen -->
+    <div id="loading" class="loading-screen">
+      <div class="loading-logo">⚔️</div>
+      <div class="loading-text">Signal Arena · Initializing</div>
+      <div class="loading-bar">
+        <div class="loading-bar-fill"></div>
+      </div>
+      <div class="splash-quote">
+        "A crypto game that makes you smarter, not poorer."
+      </div>
+    </div>
+    
+    <!-- App Root -->
+    <div id="root"></div>
+    
+    <!-- Service Worker -->
+    <script>
+      if ('serviceWorker' in navigator) {
+        navigator.serviceWorker.register('/sw.js').catch(() => {});
+      }
+    </script>
+    
+    <!-- Hide loading screen after app loads -->
+    <script>
+      window.addEventListener('load', function() {
+        setTimeout(function() {
+          var loading = document.getElementById('loading');
+          if (loading) {
+            loading.classList.add('hidden');
+            setTimeout(function() { loading.remove(); }, 500);
+          }
+        }, 800);
+      });
+    </script>
+    
+    <script type="module" src="/src/main.tsx"></script>
+  </body>
+</html>

@@ -1,0 +1,164 @@
+# ============================================================
+# SIGNAL ARENA — KUBERNETES DEPLOYMENT (§16.4)
+# Horizontally scalable, stateless API, Cloudflare-protected
+# ============================================================
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: signal-arena-api
+  namespace: signal-arena
+  labels:
+    app: signal-arena
+    component: api
+spec:
+  replicas: 3
+  strategy:
+    type: RollingUpdate
+    rollingUpdate:
+      maxSurge: 2
+      maxUnavailable: 0
+  selector:
+    matchLabels:
+      app: signal-arena
+      component: api
+  template:
+    metadata:
+      labels:
+        app: signal-arena
+        component: api
+    spec:
+      containers:
+      - name: api
+        image: signal-arena-api:latest
+        ports:
+        - containerPort: 3001
+          name: http
+        env:
+        - name: NODE_ENV
+          value: "production"
+        - name: SERVER_PORT
+          value: "3001"
+        - name: JWT_SECRET
+          valueFrom:
+            secretKeyRef:
+              name: sa-secrets
+              key: jwt-secret
+        - name: DB_USERS_TYPE
+          value: "postgresql"
+        - name: DB_USERS_PG_HOST
+          value: "sa-db-users-service"
+        - name: DB_CONTENT_TYPE
+          value: "postgresql"
+        - name: DB_CONTENT_PG_HOST
+          value: "sa-db-content-service"
+        - name: REDIS_ENABLED
+          value: "true"
+        - name: REDIS_HOST
+          value: "sa-redis-service"
+        - name: BROKER_TYPE
+          value: "rabbitmq"
+        - name: RABBITMQ_URL
+          valueFrom:
+            secretKeyRef:
+              name: sa-secrets
+              key: rabbitmq-url
+        resources:
+          requests:
+            cpu: 250m
+            memory: 256Mi
+          limits:
+            cpu: 500m
+            memory: 512Mi
+        livenessProbe:
+          httpGet:
+            path: /api/health
+            port: 3001
+          initialDelaySeconds: 10
+          periodSeconds: 15
+        readinessProbe:
+          httpGet:
+            path: /api/health
+            port: 3001
+          initialDelaySeconds: 5
+          periodSeconds: 5
+      affinity:
+        podAntiAffinity:
+          preferredDuringSchedulingIgnoredDuringExecution:
+          - weight: 100
+            podAffinityTerm:
+              labelSelector:
+                matchLabels:
+                  app: signal-arena
+                  component: api
+              topologyKey: kubernetes.io/hostname
+---
+# Horizontal Pod Autoscaler — scales based on CPU/memory
+apiVersion: autoscaling/v2
+kind: HorizontalPodAutoscaler
+metadata:
+  name: signal-arena-api-hpa
+  namespace: signal-arena
+spec:
+  scaleTargetRef:
+    apiVersion: apps/v1
+    kind: Deployment
+    name: signal-arena-api
+  minReplicas: 3
+  maxReplicas: 20
+  metrics:
+  - type: Resource
+    resource:
+      name: cpu
+      target:
+        type: Utilization
+        averageUtilization: 70
+  - type: Resource
+    resource:
+      name: memory
+      target:
+        type: Utilization
+        averageUtilization: 80
+---
+# Service — internal cluster communication
+apiVersion: v1
+kind: Service
+metadata:
+  name: signal-arena-api-service
+  namespace: signal-arena
+spec:
+  selector:
+    app: signal-arena
+    component: api
+  ports:
+  - port: 3001
+    targetPort: 3001
+    name: http
+  type: ClusterIP
+---
+# Ingress — Cloudflare-protected external access
+apiVersion: networking.k8s.io/v1
+kind: Ingress
+metadata:
+  name: signal-arena-ingress
+  namespace: signal-arena
+  annotations:
+    cert-manager.io/cluster-issuer: "letsencrypt-prod"
+    nginx.ingress.kubernetes.io/limit-rps: "100"
+    nginx.ingress.kubernetes.io/proxy-body-size: "1m"
+spec:
+  ingressClassName: nginx
+  tls:
+  - hosts:
+    - api.signalarena.io
+    secretName: sa-tls-cert
+  rules:
+  - host: api.signalarena.io
+    http:
+      paths:
+      - path: /api
+        pathType: Prefix
+        backend:
+          service:
+            name: signal-arena-api-service
+            port:
+              number: 3001

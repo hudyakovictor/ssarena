@@ -1,0 +1,28 @@
+{
+  "name": "signal-arena-server",
+  "version": "2.0.0",
+  "type": "module",
+  "description": "Signal Arena: Proof of Skill — Decoupled Production Infrastructure",
+  "scripts": {
+    "dev": "node --watch src/index.js",
+    "start": "node src/index.js",
+    "sync:content": "node src/content/sync.js",
+    "sync:pull": "node src/content/pull-agent.js",
+    "analytics:consume": "node src/analytics/consumer.js",
+    "db:migrate": "node src/db/migrate.js",
+    "db:seed": "node src/db/seed.js"
+  },
+  "dependencies": {
+    "@fastify/cors": "^9.x",
+    "@fastify/jwt": "^8.x",
+    "@fastify/rate-limit": "^8.1.1",
+    "better-sqlite3": "^11.x",
+    "dotenv": "^16.6.1",
+    "fastify": "^4.x",
+    "fastify-plugin": "^4.5.1",
+    "socket.io": "^4.8.3",
+    "socket.io-client": "^4.8.3",
+    "uuid": "^10.x",
+    "zod": "^3.x"
+  }
+}

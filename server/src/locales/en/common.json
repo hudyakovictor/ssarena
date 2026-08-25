@@ -1,0 +1,58 @@
+{
+  "common": {
+    "game_title": "Signal Arena",
+    "tagline": "Play the market. Don't become the liquidity.",
+    "play_to_improve": "Play-to-improve, not pay-to-win",
+    "menu_home": "Dashboard",
+    "menu_academy": "Academy",
+    "menu_arena": "Arena",
+    "menu_collection": "Collection",
+    "menu_bestiary": "Bestiary",
+    "menu_profile": "Profile",
+    "menu_market": "Market",
+    "btn_battle": "Deploy to Arena",
+    "btn_share": "Share",
+    "btn_retry": "Retry",
+    "status_loading": "Loading...",
+    "status_error": "Error",
+    "xp_progress": "XP Progress"
+  },
+  "battle": {
+    "phase_prebattle": "Reconnaissance",
+    "phase_battle": "Battle",
+    "phase_result": "Result",
+    "time_left": "Time Left",
+    "attention_points": "Attention Points",
+    "discipline_shield": "Discipline Shield",
+    "data_sources": "Data Sources",
+    "your_decision": "Your Decision",
+    "entity_detected": "MARKET ENTITY DETECTED",
+    "class": "Class",
+    "threat": "Threat Level",
+    "corruption": "Corruption",
+    "twist_event": "TWIST EVENT",
+    "ghost_duel": "Ghost Duel",
+    "daily_puzzle": "Daily Puzzle"
+  },
+  "bestiary": {
+    "title": "Bestiary",
+    "subtitle": "Market Entities & Threats — Field Guide",
+    "status_undiscovered": "Undiscovered",
+    "status_encountered": "Encountered",
+    "status_defeated": "Defeated",
+    "status_mastered": "Mastered",
+    "locked": "Locked",
+    "unlocks_at_rank": "Unlocks at Rank",
+    "encounters": "Encounters",
+    "wins": "Wins",
+    "win_rate": "Win Rate"
+  },
+  "terminal_voice": {
+    "fomo_defeat_1": "Social pressure peaked. You entered. Price peaked 2 minutes later.",
+    "fomo_defeat_2": "Everyone was buying. You joined last. Exit liquidity provided.",
+    "discipline_win": "The green candles screamed. You waited. Rare discipline.",
+    "leverage_defeat": "The Goblin's deal was attractive. The liquidation price wasn't.",
+    "honeypot_detected": "Contract said 'welcome'. You checked the exit. Smart.",
+    "random_decision": "Hope is not a strategy. The market confirmed."
+  }
+}

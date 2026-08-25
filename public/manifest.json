@@ -1,0 +1,16 @@
+{
+  "name": "Signal Arena — Proof of Skill",
+  "short_name": "Signal Arena",
+  "description": "A crypto game that makes you smarter, not poorer. Competitive arena where real market data becomes battles.",
+  "start_url": "/",
+  "display": "standalone",
+  "background_color": "#05070f",
+  "theme_color": "#22d3ee",
+  "orientation": "portrait-primary",
+  "icons": [
+    { "src": "/favicon.svg", "sizes": "any", "type": "image/svg+xml", "purpose": "any maskable" }
+  ],
+  "categories": ["games", "education", "finance"],
+  "lang": "ru",
+  "dir": "ltr"
+}

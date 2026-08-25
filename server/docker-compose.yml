@@ -1,0 +1,76 @@
+# ============================================================
+# SIGNAL ARENA — PRODUCTION INFRASTRUCTURE
+# docker-compose up -d
+# ============================================================
+services:
+  # Game API Server (stateless, horizontally scalable)
+  game-server:
+    build: .
+    ports:
+      - "3001:3001"
+    environment:
+      - NODE_ENV=production
+      - SERVER_PORT=3001
+      - JWT_SECRET=${JWT_SECRET}
+      - DB_USERS_TYPE=postgresql
+      - DB_USERS_PG_HOST=db-users
+      - DB_CONTENT_TYPE=postgresql
+      - DB_CONTENT_PG_HOST=db-content
+      - REDIS_ENABLED=true
+      - REDIS_HOST=redis
+      - BROKER_TYPE=rabbitmq
+      - RABBITMQ_URL=amqp://rabbitmq
+    depends_on:
+      - db-users
+      - db-content
+      - redis
+    restart: unless-stopped
+    deploy:
+      replicas: 3
+    networks:
+      - sa-internal
+
+  # DB Users (Transactional) — isolated VPC
+  db-users:
+    image: postgres:16-alpine
+    environment:
+      POSTGRES_DB: signal_arena_users
+      POSTGRES_USER: sa_user
+      POSTGRES_PASSWORD: ${DB_USERS_PASSWORD}
+    volumes:
+      - pg_users_data:/var/lib/postgresql/data
+    networks:
+      - sa-internal
+    # NO external ports — internal VPC only
+
+  # DB Content (Read-Only Replica)
+  db-content:
+    image: postgres:16-alpine
+    environment:
+      POSTGRES_DB: signal_arena_content
+      POSTGRES_USER: sa_content_reader
+      POSTGRES_PASSWORD: ${DB_CONTENT_PASSWORD}
+    volumes:
+      - pg_content_data:/var/lib/postgresql/data
+    networks:
+      - sa-internal
+
+  # Redis — Battle Session Buffer
+  redis:
+    image: redis:7-alpine
+    networks:
+      - sa-internal
+
+  # Message Broker
+  rabbitmq:
+    image: rabbitmq:4-alpine
+    networks:
+      - sa-internal
+
+volumes:
+  pg_users_data:
+  pg_content_data:
+
+networks:
+  sa-internal:
+    driver: bridge

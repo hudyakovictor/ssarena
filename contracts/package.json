@@ -1,0 +1,23 @@
+{
+  "name": "signal-arena-contracts",
+  "version": "1.0.0",
+  "description": "Signal Arena Smart Contracts - $SIG Token",
+  "scripts": {
+    "compile": "npx hardhat compile",
+    "test": "npx hardhat test",
+    "deploy:testnet": "npx hardhat run deploy.js --network arbitrumSepolia",
+    "deploy:mainnet": "npx hardhat run deploy.js --network arbitrum",
+    "deploy:local": "npx hardhat run deploy.js --network localhost",
+    "verify": "npx hardhat verify --network arbitrumSepolia",
+    "node": "npx hardhat node"
+  },
+  "dependencies": {
+    "@openzeppelin/contracts": "^5.0.0",
+    "hardhat": "^2.19.0",
+    "@nomicfoundation/hardhat-toolbox": "^4.0.0"
+  },
+  "devDependencies": {
+    "@nomicfoundation/hardhat-ethers": "^3.0.0",
+    "ethers": "^6.9.0"
+  }
+}
