@@ -1,0 +1,27 @@
+{
+  "name": "signal-arena-game",
+  "version": "1.0.0",
+  "description": "",
+  "main": "index.js",
+  "scripts": {
+    "dev": "vite",
+    "build": "tsc --noEmit && vite build",
+    "preview": "vite preview"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "dependencies": {
+    "phaser": "^3.90.0",
+    "phaser3-rex-plugins": "^1.80.20",
+    "seedrandom": "^3.0.5",
+    "zustand": "^5.0.15"
+  },
+  "devDependencies": {
+    "@types/seedrandom": "^3.0.8",
+    "typescript": "^7.0.2",
+    "vite": "^8.2.2"
+  },
+  "type": "module",
+  "private": true
+}

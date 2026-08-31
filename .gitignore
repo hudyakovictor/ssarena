@@ -19,3 +19,7 @@ server/src/data/*.db-journal
 server/src/data/*.db-shm
 server/src/data/*.db-wal
 server/src/data/*.sqlite
+
+# прототип игры
+game/node_modules/
+game/dist/
